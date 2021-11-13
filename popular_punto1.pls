@@ -1,7 +1,7 @@
 DROP TABLE contrato;
 
 CREATE TABLE contrato(
-codigo NUMBER(8) AUTO_INCREMENT PRIMARY KEY,
+codigo NUMBER(8),
 fechainicio DATE NOT NULL,
 fechafin DATE NOT NULL,
 CHECK (fechafin - fechainicio >= 1),
@@ -17,7 +17,7 @@ END LOOP;
 END;
 
 BEGIN
-auto_popular(12, '11-12-2020', '21-12-2020');
+auto_popular(12,20, '11-12-2020', '21-12-2020');
 auto_popular(21,30, '01-10-2020', '30-12-2020');
 auto_popular(31,60, '01-09-2020', '30-12-2020');
 auto_popular(61,80, '17-05-2020', '16-06-2020');
