@@ -68,8 +68,8 @@ IF pindex > 0 THEN
 IF intervals(0).fechainicio < fechainicioaux THEN
 intervals(0).fechainicio := fechainicioaux;
 END IF;
-IF fechainicioaux < intervals(pindex-1).fechafin THEN
-intervals(0).fechafin := fechafinaux;
+IF fechafinaux < intervals(pindex-1).fechafin THEN
+intervals(pindex-1).fechafin := fechafinaux;
 END IF;
 END IF;
 FOR i IN 0..pindex-1 LOOP
