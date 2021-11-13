@@ -1,4 +1,4 @@
-/* punto 1 a */
+/* punto 1 b */
 CREATE OR REPLACE PROCEDURE print_available_lapse_scenario(byYear IN NUMBER, scenario in NUMBER) IS
 CURSOR lapses IS
 SELECT fechainicio, fechafin
