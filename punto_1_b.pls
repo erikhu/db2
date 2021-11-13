@@ -27,7 +27,7 @@ la variable fechainicioaux.
 Del mismo modo con el ultimo tramo del arreglo, verificamos que su fecha fin no sea del proximo ano pues si es asi,
 la fecha fin del ultimo tramo sera actualizado por el valor por defecto de la variable fechafinaux.
 */
-CREATE OR REPLACE PROCEDURE print_available_lapse_scenario(byYear IN NUMBER, scenario in NUMBER) IS
+CREATE OR REPLACE PROCEDURE fechas_escenario_ocupado(byYear IN NUMBER, scenario in NUMBER) IS
 CURSOR lapses IS
 SELECT fechainicio, fechafin
 FROM contrato
@@ -78,5 +78,5 @@ END LOOP;
 END;
 
 BEGIN
-print_available_lapse_scenario(2020, 1);
+fechas_escenario_ocupado(2020, 1);
 END;
