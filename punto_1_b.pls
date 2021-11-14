@@ -50,17 +50,17 @@ LOOP
 FETCH lapses INTO busydate;
 EXIT WHEN lapses%NOTFOUND;
 IF pindex = 0 THEN
-intervals(pindex) := busydate;
-pindex := 1;
-ELSIF intervals(pindex-1).fechafin < busydate.fechainicio THEN
-intervals(pindex) := busydate;
-pindex := pindex + 1;
+   intervals(pindex) := busydate;
+   pindex := 1;
+ELSIF intervals(pindex-1).fechafin + 1 < busydate.fechainicio THEN
+   intervals(pindex) := busydate;
+   pindex := pindex + 1;
 ELSE
-busydate.fechainicio := intervals(pindex-1).fechainicio;
-IF busydate.fechafin < intervals(pindex-1).fechafin THEN
-busydate.fechafin := intervals(pindex-1).fechafin;
-END IF;
-intervals(pindex-1) := busydate;
+    busydate.fechainicio := intervals(pindex-1).fechainicio;
+    IF busydate.fechafin < intervals(pindex-1).fechafin THEN
+        busydate.fechafin := intervals(pindex-1).fechafin;
+    END IF;
+    intervals(pindex-1) := busydate;
 END IF;
 END LOOP;
 CLOSE lapses;
