@@ -27,3 +27,10 @@ auto_popular(121,130, '01-02-2021', '03-02-2021');
 END;
 
 SELECT * FROM contrato;
+
+
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (1, TO_DATE('01/05/2020', 'mm/dd/yyyy'), TO_DATE('01/20/2020', 'mm/dd/yyyy'), 8);
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (5, TO_DATE('01/10/2020', 'mm/dd/yyyy'), TO_DATE('01/25/2020', 'mm/dd/yyyy'), 8);
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (8, TO_DATE('03/04/2020', 'mm/dd/yyyy'), TO_DATE('03/05/2020', 'mm/dd/yyyy'), 8);
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (21, TO_DATE('03/04/2020', 'mm/dd/yyyy'), TO_DATE('03/05/2020', 'mm/dd/yyyy'), 8);
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (23, TO_DATE('03/06/2020', 'mm/dd/yyyy'), TO_DATE('03/07/2020', 'mm/dd/yyyy'), 8);
