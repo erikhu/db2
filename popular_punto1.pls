@@ -41,3 +41,11 @@ INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (300, TO_
 INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (400, TO_DATE('04/28/2017', 'mm/dd/yyyy'), TO_DATE('06/01/2017', 'mm/dd/yyyy'), 1);
 INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (10, TO_DATE('05/06/2021', 'mm/dd/yyyy'), TO_DATE('05/10/2021', 'mm/dd/yyyy'), 99);
 INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (11, TO_DATE('04/25/2021', 'mm/dd/yyyy'), TO_DATE('06/10/2021', 'mm/dd/yyyy'), 2);
+
+/* probar con 2017 escenario 3 */
+
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (28, TO_DATE('01/18/2020', 'mm/dd/yyyy'), TO_DATE('01/28/2020', 'mm/dd/yyyy'), 99);
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (9, TO_DATE('11/05/2020', 'mm/dd/yyyy'), TO_DATE('04/07/2021', 'mm/dd/yyyy'), 99);
+INSERT INTO contrato (codigo, fechainicio, fechafin, escenario) VALUES (15, TO_DATE('03/06/2019', 'mm/dd/yyyy'), TO_DATE('03/10/2019', 'mm/dd/yyyy'), 99);
+
+/*probar con 2019 escenario 99 */
