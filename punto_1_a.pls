@@ -13,6 +13,7 @@ fechainicioaux contrato.fechainicio%TYPE;
 fechafinaux contrato.fechafin%TYPE;
 intervals interval_t;
 pindex NUMBER(8);
+it NUMBER(8);
 BEGIN
 fechainicioaux := TO_DATE('01/01/'||byYear, 'dd/mm/yyyy');
 fechafinaux := TO_DATE('31/12/'||byYear, 'dd/mm/yyyy');
@@ -38,25 +39,30 @@ ELSE
 END IF;
 END LOOP;
 CLOSE lapses;
+it := 0;
 IF pindex > 0 THEN
 	IF intervals(0).fechainicio > fechainicioaux THEN
-		freedate.fechainicio := fechainicioaux;	
-		FOR i IN 0..pindex-1 LOOP
-			busydate.fechafin := intervals(i).fechafin;
-			freedate.fechafin := intervals(i).fechainicio;
-			intervals(i) := freedate;
-			freedate.fechainicio := busydate.fechafin;
-		END LOOP;
-		
-		IF busydate.fechafin < fechafinaux THEN
-			freedate.fechainicio := busydate.fechafin;
-			freedate.fechafin := fechafinaux;
-			intervals(pindex) := freedate; 
-			pindex := pindex + 1;
-		END IF;
+		freedate.fechainicio := fechainicioaux;
+	ELSE
+		freedate.fechainicio := intervals(0).fechafin;
+		it := 1;
+	END IF;	
+	
+	FOR i IN it..pindex-1 LOOP
+		busydate.fechafin := intervals(i).fechafin;
+		freedate.fechafin := intervals(i).fechainicio;
+		intervals(i) := freedate;
+		freedate.fechainicio := busydate.fechafin;
+	END LOOP;
+	
+	IF busydate.fechafin < fechafinaux THEN
+		freedate.fechainicio := busydate.fechafin;
+		freedate.fechafin := fechafinaux;
+		intervals(pindex) := freedate; 
+		pindex := pindex + 1;
 	END IF;
 END IF;
-FOR i IN 0..pindex-1 LOOP
+FOR i IN it..pindex-1 LOOP
 DBMS_OUTPUT.PUT_LINE(intervals(i).fechainicio || ' ' || intervals(i).fechafin);
 END LOOP;
 END;
