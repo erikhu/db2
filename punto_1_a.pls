@@ -2,8 +2,8 @@ CREATE OR REPLACE PROCEDURE fechas_escenario_libre(byYear IN NUMBER, scenario in
 CURSOR lapses IS
 SELECT fechainicio, fechafin
 FROM contrato
-WHERE EXTRACT(YEAR FROM fechainicio) = byYear
-OR EXTRACT(YEAR FROM fechafin) = byYear
+WHERE (EXTRACT(YEAR FROM fechainicio) = byYear 
+OR EXTRACT(YEAR FROM fechafin) = byYear) AND escenario = scenario
 GROUP BY fechainicio, fechafin
 ORDER BY fechainicio;
 busydate lapses%ROWTYPE;
@@ -39,18 +39,27 @@ END IF;
 END LOOP;
 CLOSE lapses;
 IF pindex > 0 THEN
-   IF intervals(0).fechainicio < fechainicioaux THEN
-      intervals(0).fechainicio := fechainicioaux;
-   END IF;
-   IF fechafinaux < intervals(pindex-1).fechafin THEN
-      intervals(pindex-1).fechafin := fechafinaux;
-   END IF;
+	IF intervals(0).fechainicio > fechainicioaux THEN
+		freedate.fechainicio := fechainicioaux;	
+		FOR i IN 0..pindex-1 LOOP
+			busydate.fechafin := intervals(i).fechafin;
+			freedate.fechafin := intervals(i).fechainicio;
+			intervals(i) := freedate;
+			freedate.fechainicio := busydate.fechafin;
+		END LOOP;
+		
+		IF busydate.fechafin < fechafinaux THEN
+			freedate.fechainicio := busydate.fechafin;
+			freedate.fechafin := fechafinaux;
+			intervals(pindex) := freedate; 
+			pindex := pindex + 1;
+		END IF;
+	END IF;
 END IF;
 FOR i IN 0..pindex-1 LOOP
 DBMS_OUTPUT.PUT_LINE(intervals(i).fechainicio || ' ' || intervals(i).fechafin);
 END LOOP;
 END;
-
 BEGIN
 fechas_escenario_libre(2020, 1);
 END;

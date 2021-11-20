@@ -31,8 +31,8 @@ CREATE OR REPLACE PROCEDURE fechas_escenario_ocupado(byYear IN NUMBER, scenario 
 CURSOR lapses IS
 SELECT fechainicio, fechafin
 FROM contrato
-WHERE EXTRACT(YEAR FROM fechainicio) = byYear
-OR EXTRACT(YEAR FROM fechafin) = byYear
+WHERE (EXTRACT(YEAR FROM fechainicio) = byYear 
+OR EXTRACT(YEAR FROM fechafin) = byYear) AND escenario = scenario
 GROUP BY fechainicio, fechafin
 ORDER BY fechainicio;
 busydate lapses%ROWTYPE;
