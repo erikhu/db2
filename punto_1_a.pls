@@ -27,7 +27,7 @@ freedate.fechafin := busydate.fechafin + 1;
 IF pindex = 0 THEN
     intervals(pindex) := freedate;
     pindex := 1;
-ELSIF intervals(pindex-1).fechafin + 1 < freedate.fechainicio THEN
+ELSIF intervals(pindex-1).fechafin < freedate.fechainicio THEN
     intervals(pindex) := freedate;
     pindex := pindex + 1;
 ELSE
@@ -67,7 +67,7 @@ DBMS_OUTPUT.PUT_LINE(intervals(i).fechainicio || ' ' || intervals(i).fechafin);
 END LOOP;
 END;
 BEGIN
-fechas_escenario_libre(2020, 1);
+fechas_escenario_libre(2020, 8);
 END;
 
 
