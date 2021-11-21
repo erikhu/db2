@@ -23,7 +23,7 @@ COMPOUND TRIGGER
             LOOP    
                 IF emp.salario > salarioNuevo THEN
                     UPDATE empleado SET salario = salarioViejo WHERE codigo = codigoViejo;
-                    RAISE_APPLICATION_ERROR(-20505,'Salario de empleado mayor al del jefe');
+                    RAISE_APPLICATION_ERROR(-20506,'El salario del jefe no puede ser menor al de sus empleados');
                     EXIT;
                 END IF;
             END LOOP;
@@ -38,7 +38,7 @@ COMPOUND TRIGGER
             LOOP    
                     IF emp.salario > salarioNuevo THEN
                         UPDATE empleado SET salario = salarioViejo WHERE codigo = codigoViejo;
-                        RAISE_APPLICATION_ERROR(-20505,'Salario de empleado mayor al del jefe');
+                        RAISE_APPLICATION_ERROR(-20506,'El salario del jefe no puede ser menor al de sus empleados');
                         EXIT;
                     END IF;
             END LOOP;
