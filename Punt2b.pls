@@ -64,7 +64,7 @@ COMPOUND TRIGGER
     
     BEGIN
     
-        codigoEmpleadoNuevo := :NEW.empleado;
+        codigoEmpleadoNuevo := :NEW.codigo;
         codigoJefe := :NEW.jefe;
         deptoNuevo := :NEW.depto;
         deptoJefe := :OLD.depto;
@@ -79,8 +79,7 @@ COMPOUND TRIGGER
         IF deptoJefe = deptoNuevo THEN
             DELETE FROM empleado WHERE codigo = codigoEmpleadoNuevo;
             RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual al del jefe.');
-            EXIT;
-        END IF    
+        END IF;
     END AFTER STATEMENT;
     
 END control_depto_nuevo_emp;
