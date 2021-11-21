@@ -12,7 +12,7 @@ COMPOUND TRIGGER
     
     BEGIN
     
-        codigoEmpleado := :OLD.empleado;
+        codigoEmpleado := :OLD.codigo;
         codigoJefe := :OLD.jefe;
         deptoNuevo := :NEW.depto;
         deptoAntiguo := :OLD.depto;
@@ -28,7 +28,7 @@ COMPOUND TRIGGER
             FOR employee IN (SELECT depto FROM empleado WHERE jefe = codigoEmpleado)
             LOOP    
                 IF employee.depto = deptoNuevo THEN
-                    UPDATE empleado SET depto = deptoViejo WHERE codigo = codigoEmpleado;
+                    UPDATE empleado SET depto = deptoAntiguo WHERE codigo = codigoEmpleado;
                     RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual al del jefe.');
                     EXIT;
                 END IF;
@@ -40,11 +40,12 @@ COMPOUND TRIGGER
         FOR employee IN (SELECT depto FROM empleado WHERE jefe = codigoJefe)
         LOOP
             IF deptoJefe = employee.depto THEN
-                UPDATE empleado SET depto = deptoViejo WHERE codigo = codigoEmpleado;
+                UPDATE empleado SET depto = deptoAntiguo WHERE codigo = codigoEmpleado;
                 RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual al del jefe.');
                 EXIT;
             END IF;
         END LOOP;
+        END IF;
     END AFTER STATEMENT;
     
 END actualizacion_depto;
