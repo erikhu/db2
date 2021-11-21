@@ -16,7 +16,6 @@ COMPOUND TRIGGER
         codigoJefe := :OLD.jefe;
         deptoNuevo := :NEW.depto;
         deptoAntiguo := :OLD.depto;
-        deptoJefe := :OLD.depto;
         
     END BEFORE EACH ROW;
 
