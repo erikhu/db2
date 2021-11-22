@@ -87,5 +87,7 @@ END control_depto_nuevo_emp;
 INSERT INTO empleado VALUES(11,'Pepe',5,80,5);
 /*Prueba insert con depto igual al jefe*/
 INSERT INTO empleado VALUES(12,'Pepito',11,70,5);
-/*Pruba update con depto igual al jefe*/
+/*Prueba update con depto igual al jefe*/
 UPDATE empleado SET depto = 3 WHERE codigo = 11;
+/*Prueba update jefe de jefes sin jefe*/
+UPDATE empleado SET depto = 3 WHERE codigo = 1;
