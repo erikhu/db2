@@ -28,7 +28,7 @@ COMPOUND TRIGGER
             LOOP    
                 IF employee.depto = deptoNuevo THEN
                     UPDATE empleado SET depto = deptoAntiguo WHERE codigo = codigoEmpleado;
-                    RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual al del jefe.');
+                    RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual entre el jefe y el empleado.');
                     EXIT;
                 END IF;
             END LOOP;
@@ -40,7 +40,7 @@ COMPOUND TRIGGER
         LOOP
             IF deptoJefe = employee.depto THEN
                 UPDATE empleado SET depto = deptoAntiguo WHERE codigo = codigoEmpleado;
-                RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual al del jefe.');
+                RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual entre el jefe y el empleado.');
                 EXIT;
             END IF;
         END LOOP;
@@ -76,8 +76,11 @@ COMPOUND TRIGGER
         FROM empleado WHERE codigo = codigoJefe;
         IF deptoJefe = deptoNuevo THEN
             DELETE FROM empleado WHERE codigo = codigoEmpleadoNuevo;
-            RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual al del jefe.');
+            RAISE_APPLICATION_ERROR(-20505,'El departamento ingresado no puede ser igual entre el jefe y el empleado.');
         END IF;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                DBMS_OUTPUT.PUT_LINE('');
     END AFTER STATEMENT;
     
 END control_depto_nuevo_emp;
