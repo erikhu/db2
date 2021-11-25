@@ -211,6 +211,7 @@ CREATE OR REPLACE TRIGGER controlComisionInsert
 FOR INSERT ON comision
 COMPOUND TRIGGER
     codigoEmpleado comision.codemp%TYPE;
+    comisionNueva comision.valor%TYPE;
     codigoComision comision.codcomi%TYPE;
     sumajef NUMBER(8);
     sumaemp NUMBER(8);
@@ -219,8 +220,9 @@ COMPOUND TRIGGER
 
     BEFORE EACH ROW IS
     BEGIN
-        codigoEmpleado := :NEW.codemp;
         codigoComision := :NEW.codcomi;
+        codigoEmpleado := :NEW.codemp;
+        comisionNueva := :NEW.valor;
     END BEFORE EACH ROW;
 
     AFTER STATEMENT IS
@@ -228,29 +230,35 @@ COMPOUND TRIGGER
             
         SELECT jefe INTO codaux
         FROM empleado WHERE codigo = codigoEmpleado;
-        SELECT salario INTO sumajef
-        FROM empleado WHERE codigo = codaux;
-        FOR com IN (SELECT valor FROM comision WHERE codemp = codaux)
+        IF codaux IS NOT NULL THEN
+            sumaux := 0;
+            SELECT salario INTO sumajef
+            FROM empleado WHERE codigo = codaux;
+            FOR comjef IN (SELECT valor FROM comision WHERE codemp = codaux)
+                
+            LOOP
+                sumaux := sumaux + comjef.valor;
+            END LOOP;
+            sumajef := sumajef + sumaux;
             
-        LOOP
-            sumaux := sumaux + com.valor;
-        END LOOP;
-        sumajef := sumaux;
-        
-        sumaux := 0;
-        SELECT salario into sumaux
-        FROM empleado WHERE codigo = codigoEmpleado;
-        FOR com IN (SELECT valor FROM comision WHERE codemp = codigoEmpleado)
-        
-        LOOP
-            sumaux := sumaux + com.valor;
-        END LOOP;
-        sumaemp := sumaux;
-        IF sumajef < sumaemp THEN
-            DELETE FROM comision WHERE codcomi = codigoComision;
-            RAISE_APPLICATION_ERROR(-20505,'La suma del salario y la comision del empleado es mayor a la de su jefe.');
+            SELECT salario into sumaemp
+            FROM empleado WHERE codigo = codigoEmpleado;
+            sumaux := 0;
+            FOR comemp IN (SELECT valor FROM comision WHERE codemp = codigoEmpleado)
+            LOOP
+                sumaux := sumaux + comemp.valor;
+            END LOOP;
+            
+            sumaemp := sumaemp + sumaux;
+            DBMS_OUTPUT.PUT_LINE('Suma del jefe');
+            DBMS_OUTPUT.PUT_LINE(sumajef);
+            DBMS_OUTPUT.PUT_LINE('Suma del empleado');
+            DBMS_OUTPUT.PUT_LINE(sumaemp);
+            IF sumajef < sumaemp THEN
+                DELETE FROM comision WHERE codcomi = codigoComision;
+                RAISE_APPLICATION_ERROR(-20505,'La suma del salario y la comision del empleado es mayor a la de su jefe.');
+            END IF;
         END IF;
-        
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
             DBMS_OUTPUT.PUT_LINE('');
