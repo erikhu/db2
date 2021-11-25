@@ -677,13 +677,8 @@ COMPOUND TRIGGER
             FOR comemp IN (SELECT valor FROM comision WHERE codemp = codigoEmpleado)
             LOOP
                 sumaux := sumaux + comemp.valor;
-            END LOOP;
-            
+            END LOOP;    
             sumaemp := sumaemp + sumaux;
-            DBMS_OUTPUT.PUT_LINE('Suma del jefe');
-            DBMS_OUTPUT.PUT_LINE(sumajef);
-            DBMS_OUTPUT.PUT_LINE('Suma del empleado');
-            DBMS_OUTPUT.PUT_LINE(sumaemp);
             IF sumajef < sumaemp THEN
                 DELETE FROM comision WHERE codcomi = codigoComision;
                 RAISE_APPLICATION_ERROR(-20505,'La suma del salario y la comision del empleado es mayor a la de su jefe.');
