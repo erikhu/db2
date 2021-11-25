@@ -1,4 +1,4 @@
-CREATE OR REPLACE TRIGGER controlSalarioComisionEmpleadosUpdate
+CREATE OR REPLACE TRIGGER controlSalComEmpsUpdate
 FOR UPDATE ON empleado
 COMPOUND TRIGGER
     salarioEmpleado empleado.salario%TYPE;
@@ -95,7 +95,7 @@ COMPOUND TRIGGER
         WHEN NO_DATA_FOUND THEN
             DBMS_OUTPUT.PUT_LINE('');
     END AFTER STATEMENT;
-END controlSalarioComisionEmpleadosUpdate;
+END controlSalComEmpsUpdate;
 
 
 CREATE OR REPLACE TRIGGER controlComisionUpdate
@@ -104,6 +104,7 @@ COMPOUND TRIGGER
     valorNuevo comision.valor%TYPE;
     valorViejo comision.valor%TYPE;
     codigoEmpleado comision.codemp%TYPE;
+    codigoComision comision.codcomi%TYPE;
     sumajef NUMBER(8);
     sumaemp NUMBER(8);
     sumaux NUMBER(8);
@@ -114,6 +115,7 @@ COMPOUND TRIGGER
         valorNuevo := :NEW.valor;
         valorViejo := :OLD.valor;
         codigoEmpleado := :OLD.codemp;
+        codigoComision := :OLD.codcomi;
     END BEFORE EACH ROW;
 
     AFTER STATEMENT IS
@@ -141,7 +143,7 @@ COMPOUND TRIGGER
                 END LOOP;
                 sumajef := sumaux;
                 IF sumaemp > sumajef THEN
-                    UPDATE empleado SET salario = valorViejo WHERE codigo = codigoEmpleado;
+                    UPDATE comision SET valor = valorViejo WHERE codcomi = codigoComision;
                     RAISE_APPLICATION_ERROR(-20506,'La suma del salario y la comision del empleado es mayor a la de su jefe.');
                     EXIT;
                 END IF;
@@ -167,7 +169,7 @@ COMPOUND TRIGGER
             END LOOP;
             sumajef := sumaux;
             IF sumajef < sumaemp THEN
-                UPDATE empleado SET salario = valorViejo WHERE codigo = codigoEmpleado;
+               UPDATE comision SET valor = valorViejo WHERE codcomi = codigoComision;
                 RAISE_APPLICATION_ERROR(-20505,'La suma del salario y la comision del empleado es mayor a la de su jefe.');
             END IF;
             FOR emp IN (SELECT salario, codigo FROM empleado WHERE jefe = codigoEmpleado)
@@ -191,7 +193,7 @@ COMPOUND TRIGGER
                 END LOOP;
                 sumajef := sumaux;
                 IF sumaemp > sumajef THEN
-                    UPDATE empleado SET salario = valorViejo WHERE codigo = codigoEmpleado;
+                    UPDATE comision SET valor = valorViejo WHERE codcomi = codigoComision;
                     RAISE_APPLICATION_ERROR(-20506,'La suma del salario y la comision del empleado es mayor a la de su jefe.');
                     EXIT;
                 END IF;
@@ -209,6 +211,7 @@ CREATE OR REPLACE TRIGGER controlComisionInsert
 FOR INSERT ON comision
 COMPOUND TRIGGER
     codigoEmpleado comision.codemp%TYPE;
+    codigoComision comision.codcomi%TYPE;
     sumajef NUMBER(8);
     sumaemp NUMBER(8);
     sumaux NUMBER(8);
@@ -217,6 +220,7 @@ COMPOUND TRIGGER
     BEFORE EACH ROW IS
     BEGIN
         codigoEmpleado := :NEW.codemp;
+        codigoComision := :NEW.codcomi;
     END BEFORE EACH ROW;
 
     AFTER STATEMENT IS
@@ -243,7 +247,7 @@ COMPOUND TRIGGER
         END LOOP;
         sumaemp := sumaux;
         IF sumajef < sumaemp THEN
-            DELETE FROM empleado WHERE codigo = codigoEmpleado;
+            DELETE FROM comision WHERE codcomi = codigoComision;
             RAISE_APPLICATION_ERROR(-20505,'La suma del salario y la comision del empleado es mayor a la de su jefe.');
         END IF;
         
